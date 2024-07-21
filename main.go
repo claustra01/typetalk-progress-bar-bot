@@ -6,6 +6,7 @@ import (
 	"image/color"
 	"time"
 
+	"github.com/go-co-op/gocron"
 	"gocv.io/x/gocv"
 )
 
@@ -48,5 +49,11 @@ func createProgressBar() {
 }
 
 func main() {
-	createProgressBar()
+	s := gocron.NewScheduler(time.UTC)
+
+	// 毎日0時にcreateProgressBar関数を実行
+	s.Every(1).Day().At("00:00").Do(createProgressBar)
+
+	// スケジューラを開始
+	s.StartBlocking()
 }
