@@ -6,5 +6,5 @@ WORKDIR /go/src/gocv.io/x/gocv
 
 COPY . .
 
-RUN go build -o /bin/bot .
+RUN go build -o /bin/bot ./pkg
 ENTRYPOINT ["/bin/bot"]
