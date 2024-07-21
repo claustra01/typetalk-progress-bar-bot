@@ -79,7 +79,15 @@ func PostMessage(topicId string, token string, fileKey string) {
 
 	progress := date.GetProgress()
 	remainingDays := date.GetRemainingDays()
-	message := fmt.Sprintf("全体の%.f%%が経過しました。成果発表会まであと%d日です。", progress*100, remainingDays)
+
+	var message string
+	if remainingDays > 0 {
+		message = fmt.Sprintf("プログラム全体の%.f%%が経過しました。成果発表会まであと%d日です。", progress*100, remainingDays)
+	} else if remainingDays == 0 {
+		message = "プログラム全体の100%が経過しました。本日は成果発表会です。"
+	} else {
+		os.Exit(1)
+	}
 
 	body := PostMessageRequest{
 		Message:  message,

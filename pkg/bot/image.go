@@ -36,7 +36,7 @@ func GenerateImage() string {
 
 	// タイトルを描画
 	title := "SecHack365 Progress Bar"
-	gocv.PutText(&img, title, image.Point{width/2 - 200, 40}, gocv.FontHersheyComplex, 1.0, borderColor, 2)
+	gocv.PutText(&img, title, image.Point{width/2 - 220, 40}, gocv.FontHersheyComplex, 1.0, borderColor, 2)
 
 	// 画像を保存
 	now := time.Now()
