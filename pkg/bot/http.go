@@ -27,25 +27,25 @@ func UploadImage(topicId string, token string, filename string) string {
 
 	part, err := writer.CreateFormFile("file", filename)
 	if err != nil {
-		slog.Error("Error opening file:", err)
+		slog.Error("Error creating form file:", err)
 		return ""
 	}
 
 	_, err = io.Copy(part, file)
 	if err != nil {
-		slog.Error("Error opening file:", err)
+		slog.Error("Error copying file to form file:", err)
 		return ""
 	}
 
 	err = writer.Close()
 	if err != nil {
-		slog.Error("Error opening file:", err)
+		slog.Error("Error closing writer:", err)
 		return ""
 	}
 
 	req, err := http.NewRequest("POST", url, body)
 	if err != nil {
-		slog.Error("Error opening file:", err)
+		slog.Error("Error creating request:", err)
 		return ""
 	}
 
@@ -54,20 +54,20 @@ func UploadImage(topicId string, token string, filename string) string {
 	client := &http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
-		slog.Error("Error opening file:", err)
+		slog.Error("Error sending request:", err)
 		return ""
 	}
 	defer resp.Body.Close()
 
 	responseBody, err := io.ReadAll(resp.Body)
 	if err != nil {
-		slog.Error("Error opening file:", err)
+		slog.Error("Error reading response:", err)
 		return ""
 	}
 
 	data, err := UnmarshalRespBody(responseBody)
 	if err != nil {
-		slog.Error("Error opening file:", err)
+		slog.Error("Error unmarshalling response body:", err)
 		return ""
 	}
 
@@ -87,13 +87,13 @@ func PostMessage(topicId string, token string, fileKey string) {
 	}
 	data, err := MarshalReqBody(body)
 	if err != nil {
-		fmt.Println("Error marshalling request body:", err)
+		slog.Error("Error marshalling request body:", err)
 		return
 	}
 
 	req, err := http.NewRequest("POST", url, bytes.NewBuffer(data))
 	if err != nil {
-		fmt.Println("Error creating request:", err)
+		slog.Error("Error creating request:", err)
 		return
 	}
 
@@ -102,17 +102,16 @@ func PostMessage(topicId string, token string, fileKey string) {
 	client := &http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
-		fmt.Println("Error sending request:", err)
+		slog.Error("Error sending request:", err)
 		return
 	}
 	defer resp.Body.Close()
 
-	responseBody, err := io.ReadAll(resp.Body)
+	respBody, err := io.ReadAll(resp.Body)
 	if err != nil {
-		fmt.Println("Error reading response:", err)
+		slog.Error("Error reading response:", err)
 		return
 	}
 
-	fmt.Println("Response status:", resp.Status)
-	fmt.Println("Response body:", string(responseBody))
+	slog.Info("Request:", "URL", url, "Body", string(respBody))
 }
