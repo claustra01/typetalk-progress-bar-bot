@@ -4,6 +4,7 @@ import (
 	"os"
 
 	"github.com/claustra01/typetalk-progress-bar-bot/pkg/bot"
+	"github.com/robfig/cron/v3"
 )
 
 func main() {
@@ -17,11 +18,15 @@ func main() {
 		panic("TYPETALK_TOKEN is not set")
 	}
 
-	filename := bot.GenerateImage()
-	fileKey := bot.UploadImage(topicId, token, filename)
-	bot.PostMessage(topicId, token, fileKey)
+	job := func() {
+		filename := bot.GenerateImage()
+		fileKey := bot.UploadImage(topicId, token, filename)
+		bot.PostMessage(topicId, token, fileKey)
+	}
 
-	// s := gocron.NewScheduler(time.UTC)
-	// s.Every(1).Day().At("00:00").Do(post)
-	// s.StartBlocking()
+	c := cron.New()
+	c.AddFunc("0 6 * * *", job)
+	c.Start()
+
+	select {}
 }
