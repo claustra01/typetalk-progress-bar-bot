@@ -8,6 +8,7 @@ import (
 	"mime/multipart"
 	"net/http"
 	"os"
+	"time"
 
 	"github.com/claustra01/typetalk-progress-bar-bot/pkg/date"
 )
@@ -77,8 +78,9 @@ func UploadImage(topicId string, token string, filename string) string {
 func PostMessage(topicId string, token string, fileKey string) {
 	url := fmt.Sprintf("https://typetalk.com/api/v1/topics/%s?typetalkToken=%s", topicId, token)
 
-	progress := date.GetProgress()
-	remainingDays := date.GetRemainingDays()
+	now := time.Now()
+	progress := date.GetProgress(now)
+	remainingDays := date.GetRemainingDays(now)
 
 	var message string
 	if remainingDays > 0 {

@@ -18,16 +18,14 @@ func StrToDate(str string) time.Time {
 	return t
 }
 
-func GetProgress() float64 {
-	now := time.Now()
+func GetProgress(now time.Time) float64 {
 	startDate := StrToDate(StartDate)
 	endDate := StrToDate(EndDate)
 	progress := float64(now.Sub(startDate)) / float64(endDate.Sub(startDate))
 	return progress
 }
 
-func GetRemainingDays() int {
-	now := time.Now()
+func GetRemainingDays(now time.Time) int {
 	endDate := StrToDate(EndDate)
 	remainingDays := int(endDate.Sub(now).Hours() / 24)
 	return remainingDays

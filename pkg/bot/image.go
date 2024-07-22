@@ -25,7 +25,8 @@ func GenerateImage() string {
 	gocv.Rectangle(&img, image.Rect(0, 0, width, height), bgColor, -1)
 
 	// プログレスバーを描画
-	progress := date.GetProgress()
+	now := time.Now()
+	progress := date.GetProgress(now)
 	progressBarColor := color.RGBA{255, 0, 0, 255}
 	progressWidth := int(float64(width-40) * progress)
 	gocv.Rectangle(&img, image.Rect(20, 60, 20+progressWidth, height-20), progressBarColor, -1)
@@ -39,7 +40,6 @@ func GenerateImage() string {
 	gocv.PutText(&img, title, image.Point{width/2 - 220, 40}, gocv.FontHersheyComplex, 1.0, borderColor, 2)
 
 	// 画像を保存
-	now := time.Now()
 	filename := fmt.Sprintf("progress_bar_%d_%02d_%02d.png", now.Year(), now.Month(), now.Day())
 	gocv.IMWrite(filename, img)
 	slog.Info("Generated image:", filename)
